@@ -11,15 +11,22 @@ public class HandGrabber : MonoBehaviour
     [Header("Basket Transform")]
     [SerializeField] private Transform _basketTransform;
 
+    [Header("Trigger")]
+    [SerializeField] private LayerMask _pickableObjectLayerMask;
+
     public static event System.Action<PickableObject> TargetGotInHands;
 
     private PickableObject _target;
 
     private Vector3 _initialHandPosition;
+    private Vector3 _realInitialHandPosition;
     private Vector3 _lastTargetPosition;
 
     private HandState _currentHandState;
     private float _currentBlendValue;
+
+    private Coroutine _putTargetToBasketCoroutine;
+    private bool _putTargetToBasketCoroutineIsRunning;
 
     private enum HandState
     {
@@ -31,19 +38,32 @@ public class HandGrabber : MonoBehaviour
 
     private void Start()
     {
-        _initialHandPosition = _ikTargetTransform.transform.position;
+        _realInitialHandPosition = _ikTargetTransform.transform.position;
+        _initialHandPosition = _realInitialHandPosition;
     }
 
     public void PutTargetToBasket(PickableObject target)
     {
-        if (target != _target)
+        if (_currentHandState == HandState.HandToBasket)
         {
-            _target = target;
+            return;
         }
+        else if (_currentHandState == HandState.HandToTarget)
+        {
+            _initialHandPosition = _ikTargetTransform.transform.position;
+
+            _currentBlendValue = 0f;
+        }
+
+        _target = target;        
 
         SetHandState(HandState.HandToTarget);
 
-        StartCoroutine(PutTargetToBasketIEnumerator());
+        if (_putTargetToBasketCoroutineIsRunning == false)
+        {
+            _putTargetToBasketCoroutine = StartCoroutine(PutTargetToBasketIEnumerator());
+            _putTargetToBasketCoroutineIsRunning = true;
+        }
     }
     private void SetHandState(HandState handState)
     {
@@ -52,9 +72,10 @@ public class HandGrabber : MonoBehaviour
 
     private IEnumerator PutTargetToBasketIEnumerator()
     {
+        //Debug.Log("Coroutine started" + Time.time);
+        Debug.Log("Initial" + _initialHandPosition + "   Real " + _realInitialHandPosition);
         while (true)
         {
-            Debug.Log(Time.time);
             switch (_currentHandState)
             {
                 case HandState.HandToTarget:
@@ -105,18 +126,26 @@ public class HandGrabber : MonoBehaviour
         if (HasHandReachedDestination())
         {
             SetHandState(HandState.HandToInitialPosition);
+
+            _currentBlendValue = 0f;
+
+            _initialHandPosition = _realInitialHandPosition;
         }
     }
 
     private void PullHandToInitialPosition()
     {
         LerpHandBetween(_basketTransform.position, _initialHandPosition, _currentBlendValue);
+        _currentBlendValue += Time.deltaTime;
 
         if (HasHandReachedDestination())
         {
             SetHandState(HandState.Idle);
 
-            StopCoroutine(PutTargetToBasketIEnumerator());
+            _currentBlendValue = 0f;
+
+            StopCoroutine(_putTargetToBasketCoroutine);
+            _putTargetToBasketCoroutineIsRunning = false;
         }
     }
 
@@ -143,5 +172,16 @@ public class HandGrabber : MonoBehaviour
     private void HoldTargetInHands()
     {
         _target.transform.position = _ikTargetTransform.position; 
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+
+        Gizmos.DrawSphere(_initialHandPosition, 0.3f);
+        
+        Gizmos.color = Color.red;
+        
+        Gizmos.DrawSphere(_realInitialHandPosition, 0.2f);
     }
 }

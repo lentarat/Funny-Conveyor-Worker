@@ -21,7 +21,6 @@ public class Basket : MonoBehaviour
         {
             BasketIsFull?.Invoke();   
         }
-        Debug.Log(_pickableObjects.Count);
     }
 
     private bool IsBasketFull()
