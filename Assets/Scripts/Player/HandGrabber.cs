@@ -28,6 +28,8 @@ public class HandGrabber : MonoBehaviour
     private Coroutine _putTargetToBasketCoroutine;
     private bool _putTargetToBasketCoroutineIsRunning;
 
+    private bool _isTouchingTarget;
+
     private enum HandState
     {
         Idle,
@@ -40,6 +42,8 @@ public class HandGrabber : MonoBehaviour
     {
         _realInitialHandPosition = _ikTargetTransform.transform.position;
         _initialHandPosition = _realInitialHandPosition;
+
+        TriggerChecker.TriggerHitsSmth += TriggerTouchesTarget;
     }
 
     public void PutTargetToBasket(PickableObject target)
@@ -48,7 +52,7 @@ public class HandGrabber : MonoBehaviour
         {
             return;
         }
-        else if (_currentHandState == HandState.HandToTarget)
+        else if (_currentHandState == HandState.HandToTarget || _currentHandState == HandState.HandToInitialPosition)
         {
             _initialHandPosition = _ikTargetTransform.transform.position;
 
@@ -72,8 +76,6 @@ public class HandGrabber : MonoBehaviour
 
     private IEnumerator PutTargetToBasketIEnumerator()
     {
-        //Debug.Log("Coroutine started" + Time.time);
-        Debug.Log("Initial" + _initialHandPosition + "   Real " + _realInitialHandPosition);
         while (true)
         {
             switch (_currentHandState)
@@ -105,8 +107,10 @@ public class HandGrabber : MonoBehaviour
         LerpHandBetween(_initialHandPosition, _target.transform.position, _currentBlendValue);
         _currentBlendValue += Time.deltaTime;
 
-        if (HasHandReachedDestination())
+        if (HasHandReachedDestination() && _isTouchingTarget)
         {
+            _isTouchingTarget = false;
+
             TargetGotInHands?.Invoke(_target);
             
             SetHandState(HandState.HandToBasket);
@@ -156,7 +160,7 @@ public class HandGrabber : MonoBehaviour
             return true;
         }
         else
-        {
+        { 
             return false;
         }
     }
@@ -174,14 +178,8 @@ public class HandGrabber : MonoBehaviour
         _target.transform.position = _ikTargetTransform.position; 
     }
 
-    private void OnDrawGizmos()
+    private void TriggerTouchesTarget()
     {
-        Gizmos.color = Color.cyan;
-
-        Gizmos.DrawSphere(_initialHandPosition, 0.3f);
-        
-        Gizmos.color = Color.red;
-        
-        Gizmos.DrawSphere(_realInitialHandPosition, 0.2f);
+        _isTouchingTarget = true;
     }
 }

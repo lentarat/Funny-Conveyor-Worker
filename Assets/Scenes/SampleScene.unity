@@ -174,7 +174,7 @@ MonoBehaviour:
   _startPoint: {fileID: 1468487438}
   _destinationPoint: {fileID: 1896496527}
   _destinationCatchRadius: 0.5
-  _speed: 0.4
+  _speed: 0.7
 --- !u!1 &225320209
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,11 +802,23 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 905747098}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.17656632, y: 0.22711544, z: 0.108646445}
   m_Center: {x: 0.0067314683, y: 0.1389632, z: 0.013026163}
+--- !u!114 &905747102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905747098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37b9ffe0a695b214597eca310c997826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1029836430 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8756396671162716530, guid: 0bdb4239ce0c64542a05a7f20d5e449e, type: 3}
