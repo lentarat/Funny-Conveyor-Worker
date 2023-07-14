@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 718756979655474582}
   - component: {fileID: 4812371177894543672}
   - component: {fileID: 7247328324047240394}
-  - component: {fileID: -8483910851779093744}
+  - component: {fileID: 2847906242487272513}
   m_Layer: 6
   m_Name: WaterMelon
   m_TagString: Untagged
@@ -115,7 +115,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-8483910851779093744
+--- !u!114 &2847906242487272513
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1010848170055122498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94dcc987cfa960b4ead2de39215f281a, type: 3}
+  m_Script: {fileID: 11500000, guid: a3d9a1f64a8c59648b6078becb402904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectType: 3

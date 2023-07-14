@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 public class PickableObjectFinder : MonoBehaviour
 {
     [Header("Custom Classes")]
-    [SerializeField] private Basket _basket;
-    [SerializeField] private PickableObjectsHandler _pickableObjectsHandler;
     [SerializeField] private HandGrabber _handGrabber;
 
     [Header("Other")]
@@ -75,14 +73,6 @@ public class PickableObjectFinder : MonoBehaviour
 
     private void HandlePuttingPickableObjectToBasket(PickableObject pickableObject)
     {
-        ManageLists(pickableObject);
-
-        _handGrabber.PutPickableObjectToBasket(pickableObject);
-    }
-
-    private void ManageLists(PickableObject pickableObject)
-    {
-        _basket.AddPickableObjectToBasket(pickableObject);
-        _pickableObjectsHandler.RemovePickableObject(pickableObject);
+        _handGrabber.PutTargetToBasket(pickableObject);
     }
 }

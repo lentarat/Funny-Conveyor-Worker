@@ -290,7 +290,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ca5802ea1928e645924b1e769eae766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dropPoint: {fileID: 329395204}
   _basketSize: 5
 --- !u!1 &329395203
 GameObject:
@@ -1178,6 +1177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2068d9b65a2dd58459363a3bd5884171, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _basket: {fileID: 0}
+  _pickableObjectsHandler: {fileID: 0}
   _handGrabber: {fileID: 0}
   _camera: {fileID: 609357605}
   _player: {fileID: 1619670598}
@@ -1242,7 +1243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ca5802ea1928e645924b1e769eae766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dropPoint: {fileID: 329395204}
   _basketSize: 5
 --- !u!1 &1630553430
 GameObject:
@@ -2035,10 +2035,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b96c64dd7665c41b02db87c20575a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basket: {fileID: 225320214}
-  _pickableObjectsHandler: {fileID: 874699912}
-  _ikTarget: {fileID: 673710562}
-  _ikHint: {fileID: 1029836430}
+  _ikTargetTransform: {fileID: 673710562}
+  _ikHintTransform: {fileID: 1029836430}
+  _basketTransform: {fileID: 225320210}
 --- !u!1001 &8756396671890563068
 PrefabInstance:
   m_ObjectHideFlags: 0
