@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ObjectPicker : MonoBehaviour
+public class PickableObjectFinder : MonoBehaviour
 {
     [Header("Custom Classes")]
     [SerializeField] private Basket _basket;
     [SerializeField] private PickableObjectsHandler _pickableObjectsHandler;
+    [SerializeField] private HandGrabber _handGrabber;
 
     [Header("Other")]
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _player;
-    [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private LayerMask _pickableObjectsLayerMask;
 
     private PlayerInputActions _playerInputActions;
 
@@ -53,25 +54,35 @@ public class ObjectPicker : MonoBehaviour
         _mousePosition = context.ReadValue<Vector2>();
         _rayToTouchPoint = _camera.ScreenPointToRay(_mousePosition);
 
-        PickableObject pickableObject = GetPickableObject();
+        PickableObject pickableObject = GetPickableObjectWithRayCast();
 
         if (pickableObject != null)
         {
-            _basket.AddPickableObjectToBasket(pickableObject);
-            _pickableObjectsHandler.RemovePickableObject(pickableObject);
-
-            _basket.TeleportPickableObjectToBasket(pickableObject.transform);
+            HandlePuttingPickableObjectToBasket(pickableObject);
         }
     }
 
-    private PickableObject GetPickableObject()
+    private PickableObject GetPickableObjectWithRayCast()
     {
         RaycastHit raycastHit;
-        if(Physics.Raycast(_rayToTouchPoint, out raycastHit, Mathf.Infinity, _layerMask))
+        if(Physics.Raycast(_rayToTouchPoint, out raycastHit, Mathf.Infinity, _pickableObjectsLayerMask))
         {
             return raycastHit.collider.GetComponent<PickableObject>();
         }
 
         return null;
-    }    
+    }
+
+    private void HandlePuttingPickableObjectToBasket(PickableObject pickableObject)
+    {
+        ManageLists(pickableObject);
+
+        _handGrabber.PutPickableObjectToBasket(pickableObject);
+    }
+
+    private void ManageLists(PickableObject pickableObject)
+    {
+        _basket.AddPickableObjectToBasket(pickableObject);
+        _pickableObjectsHandler.RemovePickableObject(pickableObject);
+    }
 }
