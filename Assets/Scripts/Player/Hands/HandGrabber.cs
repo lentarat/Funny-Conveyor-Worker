@@ -14,7 +14,10 @@ public class HandGrabber : MonoBehaviour
     [Header("Trigger")]
     [SerializeField] private LayerMask _pickableObjectLayerMask;
 
-    public static event System.Action<PickableObject> TargetGotInHands;
+    [Header("Common")]
+    [SerializeField] private float _handSpeed;
+
+    public static event System.Action<PickableObject> TargetGotInBasket;
 
     private PickableObject _target;
 
@@ -105,7 +108,7 @@ public class HandGrabber : MonoBehaviour
     private void PullHandToTarget()
     {
         LerpHandBetween(_initialHandPosition, _target.transform.position, _currentBlendValue);
-        _currentBlendValue += Time.deltaTime;
+        ChangeBlendValue(_handSpeed * Time.deltaTime);
 
         if (HasHandReachedDestination() && _isTouchingTarget)
         {
@@ -117,15 +120,13 @@ public class HandGrabber : MonoBehaviour
             _lastTargetPosition = _ikTargetTransform.position;
 
             _handsWithBasketHandler.LiftBasket();
-
-            TargetGotInHands?.Invoke(_target);
         }
     }
 
     private void PullTargetToBasket()
     {
         LerpHandBetween(_lastTargetPosition, _basketTransform.position, _currentBlendValue);
-        _currentBlendValue += Time.deltaTime;
+        ChangeBlendValue(_handSpeed * Time.deltaTime);
 
         HoldTargetInHands();
 
@@ -138,13 +139,15 @@ public class HandGrabber : MonoBehaviour
             _initialHandPosition = _realInitialHandPosition;
 
             _handsWithBasketHandler.LowerBasket();
+
+            TargetGotInBasket?.Invoke(_target);
         }
     }
 
     private void PullHandToInitialPosition()
     {
         LerpHandBetween(_basketTransform.position, _initialHandPosition, _currentBlendValue);
-        _currentBlendValue += Time.deltaTime;
+        ChangeBlendValue(_handSpeed * Time.deltaTime);
 
         if (HasHandReachedDestination())
         {
@@ -157,6 +160,18 @@ public class HandGrabber : MonoBehaviour
         }
     }
 
+    private void LerpHandBetween(Vector3 start, Vector3 destination, float blendValue)
+    {
+        Vector3 lerpedPosition = Vector3.Lerp(start, destination, blendValue);
+        
+        _ikTargetTransform.transform.position = lerpedPosition;
+    }
+
+    private void ChangeBlendValue(float value)
+    {
+        _currentBlendValue += value;
+    }
+
     private bool HasHandReachedDestination()
     {
         if (_currentBlendValue >= 1f)
@@ -164,16 +179,9 @@ public class HandGrabber : MonoBehaviour
             return true;
         }
         else
-        { 
+        {
             return false;
         }
-    }
-
-    private void LerpHandBetween(Vector3 start, Vector3 destination, float blendValue)
-    {
-        Vector3 lerpedPosition = Vector3.Lerp(start, destination, blendValue);
-        
-        _ikTargetTransform.transform.position = lerpedPosition;
     }
 
     private void HoldTargetInHands()

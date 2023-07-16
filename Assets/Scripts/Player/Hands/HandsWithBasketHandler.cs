@@ -12,7 +12,7 @@ public class HandsWithBasketHandler : MonoBehaviour
     [SerializeField] private Transform _basketTransform;
 
     [Header("Common")]
-    [SerializeField] private float _evaluationSpeed;
+    [SerializeField] private float _handSpeed;
 
     private float _blendValue;
 
@@ -28,7 +28,6 @@ public class HandsWithBasketHandler : MonoBehaviour
         _basketStartPosition = _ikTargetTransform.position;
     }
 
-    [ContextMenu("Up")]
     public void LiftBasket()
     {
         _isPullingUp = true;
@@ -40,7 +39,6 @@ public class HandsWithBasketHandler : MonoBehaviour
         }
     }
 
-    [ContextMenu("Down")]
     public void LowerBasket()
     {
         _isPullingUp = false;
@@ -56,11 +54,9 @@ public class HandsWithBasketHandler : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log("PullBasket " + Time.time);
-
             if (_isPullingUp)
             {
-                _blendValue += _evaluationSpeed * Time.deltaTime;
+                _blendValue += _handSpeed * Time.deltaTime;
 
                 LerpHandBetween(_basketStartPosition, _basketLiftDestination.position, _blendValue);
 
@@ -75,7 +71,7 @@ public class HandsWithBasketHandler : MonoBehaviour
             }
             else
             {
-                _blendValue -= _evaluationSpeed * Time.deltaTime;
+                _blendValue -= _handSpeed * Time.deltaTime;
 
                 LerpHandBetween(_basketStartPosition, _basketLiftDestination.position, _blendValue);
 

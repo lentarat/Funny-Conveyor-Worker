@@ -11,6 +11,6 @@ public class PickableObject : MonoBehaviour
         Apple,
         Banana,
         Orange,
-        WaterMelon
+        NumberOfTypes
     }
 }

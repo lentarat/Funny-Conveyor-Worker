@@ -4,16 +4,30 @@ using UnityEngine;
 
 public class Basket : MonoBehaviour
 {
-    [SerializeField] private int _basketSize;
+    private int _basketSize;
 
-    public event System.Action PickableObjectWasAddedToBasket;
-    public event System.Action BasketIsFull;
+    public static event System.Action PickableObjectWasAddedToBasket;
+    public static event System.Action BasketIsFull;
 
     private List<PickableObject> _pickableObjects = new();
 
+    private PickableObject.ObjectsType _requiredPickableObjectType;
+
+    private void Start()
+    {
+        _basketSize = GameManager.Instance.TaskGenerator.GetRequiredPickableObjectsNumber();
+        _requiredPickableObjectType = GameManager.Instance.TaskGenerator.GetRequiredPickableObjectType();
+    }
+
     public void AddPickableObjectToBasket(PickableObject pickableObject)
     {
+        if (pickableObject.ObjectType != _requiredPickableObjectType)
+        {
+            GameManager.Instance.GameLost();
+        }
+
         _pickableObjects.Add(pickableObject);
+
         PickableObjectWasAddedToBasket?.Invoke();
 
         if (IsBasketFull())

@@ -22,9 +22,10 @@ public class PickableObjectsHandler : MonoBehaviour
 
     private float _lastTimeObjectWasSpawned;
 
+
     private void Awake()
     {
-        HandGrabber.TargetGotInHands += ManageLists;
+        HandGrabber.TargetGotInBasket += ManageLists;
     }
 
     private void Start()
