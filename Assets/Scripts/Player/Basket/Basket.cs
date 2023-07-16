@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Basket : MonoBehaviour
 {
-    //[SerializeField] Transform _dropPoint;
     [SerializeField] private int _basketSize;
 
     public event System.Action PickableObjectWasAddedToBasket;

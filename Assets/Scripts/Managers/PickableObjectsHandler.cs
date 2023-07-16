@@ -11,7 +11,8 @@ public class PickableObjectsHandler : MonoBehaviour
 
     [Header("Pickable Objects")]
     [SerializeField] private Transform _spawnPoint;
-    [SerializeField] private Transform _spawnedPickableObjectsParent;
+    [SerializeField] private Transform _spawnedPickableObjectsConveyorParent;
+    [SerializeField] private Transform _spawnedPickableObjectsBasketParent;
     [SerializeField] private Transform[] _pickableObjectsToSpawn;
     private List<PickableObject> _pickableObjects = new();
 
@@ -57,7 +58,10 @@ public class PickableObjectsHandler : MonoBehaviour
         int randomObjectNumber = Random.Range(0, _pickableObjectsToSpawn.Length);
 
         Transform instatiatedPickableObjectTransform =
-            Instantiate(_pickableObjectsToSpawn[randomObjectNumber].transform, _spawnPoint.transform.position, Quaternion.identity, _spawnedPickableObjectsParent);
+            Instantiate(_pickableObjectsToSpawn[randomObjectNumber].transform, _spawnPoint.transform.position, Quaternion.identity/*, _spawnedPickableObjectsParent*/);
+
+        instatiatedPickableObjectTransform.parent = _spawnedPickableObjectsConveyorParent;
+
         PickableObject instatiatedPickableObject = instatiatedPickableObjectTransform.GetComponent<PickableObject>();
 
         _pickableObjects.Add(instatiatedPickableObject);
@@ -65,6 +69,8 @@ public class PickableObjectsHandler : MonoBehaviour
 
     public void RemovePickableObject(PickableObject pickableObject)
     {
+        pickableObject.gameObject.transform.parent = _spawnedPickableObjectsBasketParent;
+
         _pickableObjects.Remove(pickableObject);
     }
 

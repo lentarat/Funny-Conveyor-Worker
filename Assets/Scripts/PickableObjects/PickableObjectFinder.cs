@@ -10,7 +10,6 @@ public class PickableObjectFinder : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] private Camera _camera;
-    [SerializeField] private Transform _player;
     [SerializeField] private LayerMask _pickableObjectsLayerMask;
 
     private PlayerInputActions _playerInputActions;

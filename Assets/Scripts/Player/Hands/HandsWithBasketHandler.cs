@@ -29,7 +29,7 @@ public class HandsWithBasketHandler : MonoBehaviour
     }
 
     [ContextMenu("Up")]
-    private void LiftBasket()
+    public void LiftBasket()
     {
         _isPullingUp = true;
 
@@ -41,7 +41,7 @@ public class HandsWithBasketHandler : MonoBehaviour
     }
 
     [ContextMenu("Down")]
-    private void LowerBasket()
+    public void LowerBasket()
     {
         _isPullingUp = false;
 

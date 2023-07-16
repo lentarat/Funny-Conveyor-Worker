@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class HandGrabber : MonoBehaviour
 {
-    [Header("Hand Transform")]
+    [Header("Hands")]
     [SerializeField] private Transform _ikTargetTransform;
+    [SerializeField] private HandsWithBasketHandler _handsWithBasketHandler;
 
     [Header("Basket Transform")]
     [SerializeField] private Transform _basketTransform;
@@ -109,13 +110,15 @@ public class HandGrabber : MonoBehaviour
         if (HasHandReachedDestination() && _isTouchingTarget)
         {
             _isTouchingTarget = false;
-
-            TargetGotInHands?.Invoke(_target);
             
             SetHandState(HandState.HandToBasket);
 
             _currentBlendValue = 0f;
             _lastTargetPosition = _ikTargetTransform.position;
+
+            _handsWithBasketHandler.LiftBasket();
+
+            TargetGotInHands?.Invoke(_target);
         }
     }
 
@@ -133,6 +136,8 @@ public class HandGrabber : MonoBehaviour
             _currentBlendValue = 0f;
 
             _initialHandPosition = _realInitialHandPosition;
+
+            _handsWithBasketHandler.LowerBasket();
         }
     }
 
