@@ -6,7 +6,6 @@ public class HandGrabber : MonoBehaviour
 {
     [Header("Hand Transform")]
     [SerializeField] private Transform _ikTargetTransform;
-    [SerializeField] private Transform _ikHintTransform;
 
     [Header("Basket Transform")]
     [SerializeField] private Transform _basketTransform;
@@ -170,7 +169,6 @@ public class HandGrabber : MonoBehaviour
         Vector3 lerpedPosition = Vector3.Lerp(start, destination, blendValue);
         
         _ikTargetTransform.transform.position = lerpedPosition;
-        _ikHintTransform.transform.position = lerpedPosition;
     }
 
     private void HoldTargetInHands()
