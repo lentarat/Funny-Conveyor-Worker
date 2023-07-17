@@ -11,9 +11,10 @@ public class PickableObjectsHandler : MonoBehaviour
 
     [Header("Pickable Objects")]
     [SerializeField] private Transform _spawnPoint;
-    //[SerializeField] private Transform _spawnedPickableObjectsConveyorParent;
     [SerializeField] private Transform _spawnedPickableObjectsBasketParent;
     [SerializeField] private Transform[] _pickableObjectsToSpawn;
+    //[SerializeField] private Transform _spawnedPickableObjectsConveyorParent;
+
     private List<PickableObject> _pickableObjects = new();
 
     [Header("Common")]
@@ -30,7 +31,7 @@ public class PickableObjectsHandler : MonoBehaviour
 
     private void Start()
     {
-        SpawnPickableObject();
+        //SpawnPickableObject();
     }
 
     private void Update()

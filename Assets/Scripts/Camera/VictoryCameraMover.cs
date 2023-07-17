@@ -8,7 +8,7 @@ public class VictoryCameraMover : MonoBehaviour
     [SerializeField] private Transform _camera;
 
     [Header("Path Position")]
-    [SerializeField] private Transform _cameraPathStartTransform;
+    [SerializeField] private Transform _cameraPathEndTransform;
 
     [Header("Player Position")]
     [SerializeField] private Transform _playerTransform;
@@ -17,16 +17,19 @@ public class VictoryCameraMover : MonoBehaviour
     [SerializeField] private float _cameraFlyDuration;
 
     private float _timeWhenStartedFlying;
-    private Transform _cameraPathEndTransform;
+    private Vector3 _cameraPathStartPosition;
 
     private void Start()
     {
         GameManager.Instance.OnLevelPassed += MoveCamera;
 
-        _cameraPathStartTransform.position = transform.position;
+        _cameraPathStartPosition = transform.position;
     }
+    [ContextMenu("go")]
     private void MoveCamera()
     {
+        _timeWhenStartedFlying = Time.time;
+
         StartCoroutine(MoveCameraIEnumerator());
     }
 
@@ -36,6 +39,8 @@ public class VictoryCameraMover : MonoBehaviour
         {
             LerpCamera();
 
+            WatchPlayer();
+
             yield return null;
         }
     }
@@ -44,12 +49,14 @@ public class VictoryCameraMover : MonoBehaviour
     {
         float blendValue = (Time.time - _timeWhenStartedFlying) / _cameraFlyDuration;
 
-        Vector3 calculatedPosition = Vector3.Lerp(_cameraPathStartTransform.position, _cameraPathEndTransform.position, blendValue);
+        Vector3 calculatedPosition = Vector3.Lerp(_cameraPathStartPosition, _cameraPathEndTransform.position, blendValue);
+
+        Debug.Log(blendValue + " " + calculatedPosition);
 
         _camera.position = calculatedPosition;
     }
 
-    private void WatchTarget(Vector3 position)
+    private void WatchPlayer()
     {
         _camera.LookAt(_playerTransform.position);
     }

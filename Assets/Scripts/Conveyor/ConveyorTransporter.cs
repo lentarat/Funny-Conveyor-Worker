@@ -7,6 +7,7 @@ public class ConveyorTransporter : MonoBehaviour
     [Header("Essentials")]
     [SerializeField] private PickableObjectsHandler _pickableObjectsHandler;
     [SerializeField] private HandGrabber _handGrabber;
+    [SerializeField] private Basket _basket;
 
     [Header("Path")]
     [SerializeField] private Transform _startPoint;
@@ -22,6 +23,7 @@ public class ConveyorTransporter : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.OnLevelPassed += DecelerateConveyor;
+        GameManager.Instance.OnGameLost += DecelerateConveyor;
     }
 
     private void Update()
@@ -45,9 +47,27 @@ public class ConveyorTransporter : MonoBehaviour
             }
             else
             {
+                if (HasLostRequiredPickableObject(pickableObjectToTransport))
+                {
+                    GameManager.Instance.GameLost();
+                }
                 _handGrabber.LoseCurrentTarget(pickableObjectToTransport);
                 DestroyPickableObject(pickableObjectToTransport);
             }
+        }
+    }
+
+    private bool HasLostRequiredPickableObject(PickableObject pickableObjectToDestroy)
+    {
+        PickableObject.ObjectsType requiredObjectType = GameManager.Instance.TaskGenerator.GetRequiredPickableObjectType();
+
+        if (pickableObjectToDestroy.ObjectType == requiredObjectType)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -57,7 +77,6 @@ public class ConveyorTransporter : MonoBehaviour
         Destroy(pickableObjectToDestroy.gameObject);
     }
 
-    [ContextMenu("GO")]
     private void DecelerateConveyor()
     {
         StartCoroutine(DecelerateConveyorIEnumerator());
