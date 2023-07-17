@@ -19,11 +19,12 @@ public class HandGrabber : MonoBehaviour
 
     public static event System.Action<PickableObject> TargetGotInBasket;
 
-    private PickableObject _target;
+    private PickableObject _currentTarget;
 
     private Vector3 _initialHandPosition;
     private Vector3 _realInitialHandPosition;
     private Vector3 _lastTargetPosition;
+    private Vector3 _lastGrabbedDisappearedTargetPosition;
 
     private HandState _currentHandState;
     private float _currentBlendValue;
@@ -38,7 +39,8 @@ public class HandGrabber : MonoBehaviour
         Idle,
         HandToTarget,
         HandToBasket,
-        HandToInitialPosition
+        HandToInitialPosition,
+        HandToInitialPositionFromDisappearedTarget
     }
 
     private void Start()
@@ -47,6 +49,20 @@ public class HandGrabber : MonoBehaviour
         _initialHandPosition = _realInitialHandPosition;
 
         TriggerChecker.TriggerHitsSmth += TriggerTouchesTarget;
+    }
+
+    public void LoseCurrentTarget(PickableObject pickableObjectToLose)
+    {
+        if (_currentTarget != pickableObjectToLose)
+            return;
+
+        _lastGrabbedDisappearedTargetPosition = _currentTarget.transform.position;
+        
+        _currentTarget = null;
+
+        _currentBlendValue = 0f;
+
+        SetHandState(HandState.HandToInitialPositionFromDisappearedTarget);
     }
 
     public void PutTargetToBasket(PickableObject target)
@@ -62,7 +78,7 @@ public class HandGrabber : MonoBehaviour
             _currentBlendValue = 0f;
         }
 
-        _target = target;        
+        _currentTarget = target;        
 
         SetHandState(HandState.HandToTarget);
 
@@ -98,6 +114,11 @@ public class HandGrabber : MonoBehaviour
                         PullHandToInitialPosition();
                         break;
                     }
+                case HandState.HandToInitialPositionFromDisappearedTarget:
+                    {
+                        PullHandToInitialPosition(_lastGrabbedDisappearedTargetPosition);
+                        break;
+                    }
                 default:
                     break;
             }
@@ -107,8 +128,8 @@ public class HandGrabber : MonoBehaviour
 
     private void PullHandToTarget()
     {
-        LerpHandBetween(_initialHandPosition, _target.transform.position, _currentBlendValue);
-        ChangeBlendValue(_handSpeed * Time.deltaTime);
+        LerpHandBetween(_initialHandPosition, _currentTarget.transform.position, _currentBlendValue);
+        AddBlendValue(_handSpeed * Time.deltaTime);
 
         if (HasHandReachedDestination() && _isTouchingTarget)
         {
@@ -126,7 +147,7 @@ public class HandGrabber : MonoBehaviour
     private void PullTargetToBasket()
     {
         LerpHandBetween(_lastTargetPosition, _basketTransform.position, _currentBlendValue);
-        ChangeBlendValue(_handSpeed * Time.deltaTime);
+        AddBlendValue(_handSpeed * Time.deltaTime);
 
         HoldTargetInHands();
 
@@ -140,14 +161,30 @@ public class HandGrabber : MonoBehaviour
 
             _handsWithBasketHandler.LowerBasket();
 
-            TargetGotInBasket?.Invoke(_target);
+            TargetGotInBasket?.Invoke(_currentTarget);
         }
     }
 
     private void PullHandToInitialPosition()
     {
         LerpHandBetween(_basketTransform.position, _initialHandPosition, _currentBlendValue);
-        ChangeBlendValue(_handSpeed * Time.deltaTime);
+        AddBlendValue(_handSpeed * Time.deltaTime);
+
+        if (HasHandReachedDestination())
+        {
+            SetHandState(HandState.Idle);
+
+            _currentBlendValue = 0f;
+
+            StopCoroutine(_putTargetToBasketCoroutine);
+            _putTargetToBasketCoroutineIsRunning = false;
+        }
+    }
+
+    private void PullHandToInitialPosition(Vector3 from)
+    {
+        LerpHandBetween(from, _initialHandPosition, _currentBlendValue);
+        AddBlendValue(_handSpeed * Time.deltaTime);
 
         if (HasHandReachedDestination())
         {
@@ -167,7 +204,7 @@ public class HandGrabber : MonoBehaviour
         _ikTargetTransform.transform.position = lerpedPosition;
     }
 
-    private void ChangeBlendValue(float value)
+    private void AddBlendValue(float value)
     {
         _currentBlendValue += value;
     }
@@ -186,7 +223,7 @@ public class HandGrabber : MonoBehaviour
 
     private void HoldTargetInHands()
     {
-        _target.transform.position = _ikTargetTransform.position; 
+        _currentTarget.transform.position = _ikTargetTransform.position; 
     }
 
     private void TriggerTouchesTarget()

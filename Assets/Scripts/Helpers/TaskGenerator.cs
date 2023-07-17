@@ -8,8 +8,8 @@ public class TaskGenerator
     private string _randomPickableObjectTypeString;
     private PickableObject.ObjectsType _randomPickableObjectType;
 
-    private int _minPickableObjectsRequired = 3;
-    private int _maxPickableObjectsRequired = 6;
+    private int _minPickableObjectsRequired = 1;
+    private int _maxPickableObjectsRequired = 7;
 
     public TaskGenerator()
     {
@@ -19,11 +19,10 @@ public class TaskGenerator
     private void Generate()
     {
         System.Random random = new System.Random();
-        //_randomPickableObjectsNumber = Random.Range(_minPickableObjectsRequired, _maxPickableObjectsRequired);
+
         _randomPickableObjectsNumber = random.Next(_minPickableObjectsRequired, _maxPickableObjectsRequired);
 
         int pickableObjectTypesLength = (int)PickableObject.ObjectsType.NumberOfTypes;
-        //_randomPickableObjectType = (PickableObject.ObjectsType)Random.Range(0, pickableObjectTypesLength);
         _randomPickableObjectType = (PickableObject.ObjectsType)random.Next(0, pickableObjectTypesLength);
         _randomPickableObjectTypeString = _randomPickableObjectType.ToString();
     }

@@ -6,8 +6,8 @@ public class Basket : MonoBehaviour
 {
     private int _basketSize;
 
-    public static event System.Action PickableObjectWasAddedToBasket;
-    public static event System.Action BasketIsFull;
+    public static event System.Action OnPickableObjectWasAddedToBasket;
+    //public static event System.Action BasketIsFull;
 
     private List<PickableObject> _pickableObjects = new();
 
@@ -28,11 +28,12 @@ public class Basket : MonoBehaviour
 
         _pickableObjects.Add(pickableObject);
 
-        PickableObjectWasAddedToBasket?.Invoke();
+        OnPickableObjectWasAddedToBasket?.Invoke();
 
         if (IsBasketFull())
         {
-            BasketIsFull?.Invoke();   
+            //BasketIsFull?.Invoke();
+            GameManager.Instance.LevelPassed();
         }
     }
 

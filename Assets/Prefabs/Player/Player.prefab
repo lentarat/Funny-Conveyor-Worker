@@ -2138,6 +2138,7 @@ GameObject:
   - component: {fileID: 6640601483245407193}
   - component: {fileID: 6640601483245407195}
   - component: {fileID: 8756396671890563070}
+  - component: {fileID: 8756396671890563077}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2324,7 +2325,7 @@ MonoBehaviour:
   _pickableObjectLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  _handSpeed: 0
+  _handSpeed: 1.25
 --- !u!114 &8756396671890563070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2340,7 +2341,20 @@ MonoBehaviour:
   _ikTargetTransform: {fileID: 1939122191}
   _basketLiftDestination: {fileID: 611892532}
   _basketTransform: {fileID: 8756396671924080788}
-  _handSpeed: 0
+  _handSpeed: 1.25
+--- !u!114 &8756396671890563077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8648920937270924523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86f6f45c676312a408468e9ed1884441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 2714790676690981931}
 --- !u!1 &8719035401250967482
 GameObject:
   m_ObjectHideFlags: 0
@@ -2397,7 +2411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8756396671162716529}
   m_LocalRotation: {x: -0, y: 0.99124426, z: -0, w: 0.13204168}
-  m_LocalPosition: {x: 0.438, y: -0.972, z: 0.019}
+  m_LocalPosition: {x: 0.554, y: -0.972, z: 0.005}
   m_LocalScale: {x: 0.09999995, y: 0.1, z: 0.09999995}
   m_ConstrainProportionsScale: 0
   m_Children: []

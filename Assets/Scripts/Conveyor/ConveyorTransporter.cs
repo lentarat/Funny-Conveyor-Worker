@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ConveyorTransporter : MonoBehaviour
 {
-    [Header("Spawner")]
+    [Header("Essentials")]
     [SerializeField] private PickableObjectsHandler _pickableObjectsHandler;
+    [SerializeField] private HandGrabber _handGrabber;
 
     [Header("Path")]
     [SerializeField] private Transform _startPoint;
@@ -14,8 +15,14 @@ public class ConveyorTransporter : MonoBehaviour
 
     [Header("Conveyor Properties")]
     [SerializeField] private float _speed;
+    [SerializeField, Range(0f, 1f)] private float _deceleration;
  
     private bool _isWorking = true;
+
+    private void Start()
+    {
+        GameManager.Instance.OnLevelPassed += DecelerateConveyor;
+    }
 
     private void Update()
     {
@@ -38,6 +45,7 @@ public class ConveyorTransporter : MonoBehaviour
             }
             else
             {
+                _handGrabber.LoseCurrentTarget(pickableObjectToTransport);
                 DestroyPickableObject(pickableObjectToTransport);
             }
         }
@@ -48,4 +56,23 @@ public class ConveyorTransporter : MonoBehaviour
         _pickableObjectsHandler.RemovePickableObject(pickableObjectToDestroy);
         Destroy(pickableObjectToDestroy.gameObject);
     }
-}
+
+    [ContextMenu("GO")]
+    private void DecelerateConveyor()
+    {
+        StartCoroutine(DecelerateConveyorIEnumerator());
+    }
+
+    private IEnumerator DecelerateConveyorIEnumerator()
+    {
+        while(_speed > 0.02f)
+        {
+            _speed *= _deceleration * (1 - Time.deltaTime);
+            
+            yield return null;
+        }
+        _speed = 0f;
+
+        yield return null;
+    }
+}   

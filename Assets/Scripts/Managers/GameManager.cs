@@ -9,6 +9,16 @@ public class GameManager : MonoBehaviour
 
     public TaskGenerator TaskGenerator = new TaskGenerator();
 
+    public event System.Action OnLevelPassed;
+
+    public GameState CurrentGameState;
+
+    public enum GameState
+    {
+        Active,
+        Win
+    }
+
     private GameManager()
     {
     
@@ -17,10 +27,18 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+
+        CurrentGameState = GameState.Active;
     }
 
     public void GameLost()
     {
         Time.timeScale = 0f;
+    }
+
+    public void LevelPassed()
+    {
+        OnLevelPassed?.Invoke();
+        CurrentGameState = GameState.Win;
     }
 }

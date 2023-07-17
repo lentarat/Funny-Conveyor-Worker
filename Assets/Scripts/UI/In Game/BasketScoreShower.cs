@@ -19,7 +19,7 @@ public class BasketScoreShower : MonoBehaviour
 
     private void Awake()
     {
-        Basket.PickableObjectWasAddedToBasket += ShowPlusOnePoint;
+        Basket.OnPickableObjectWasAddedToBasket += ShowPlusOnePoint;
 
         _plusOneText.transform.position = _basketTransform.position;
         _initialPlusOneTextPosition = _plusOneText.transform.position;
