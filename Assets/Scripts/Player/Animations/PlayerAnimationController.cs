@@ -11,6 +11,11 @@ public class PlayerAnimationController : MonoBehaviour
         GameManager.Instance.OnLevelPassed += Dance;
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.OnLevelPassed -= Dance;
+    }
+
     private void Dance()
     {
         _animator.Play("Dance");

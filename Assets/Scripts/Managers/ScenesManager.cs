@@ -7,7 +7,6 @@ public static class ScenesManager
 {
     public enum Scenes
     {
-        MainMenu,
         Game
     }
 

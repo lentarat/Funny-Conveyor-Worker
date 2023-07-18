@@ -15,6 +15,11 @@ public class TaskShower : MonoBehaviour
         _textMeshProUGUI.text = generatedTaskText;
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.OnLevelPassed -= ShowLevelPassedText;
+    }
+
     private void ShowLevelPassedText()
     {
         _textMeshProUGUI.text = "Level Passed!";

@@ -72,6 +72,10 @@ public class PickableObjectFinder : MonoBehaviour
 
     private void HandlePuttingPickableObjectToBasket(PickableObject pickableObject)
     {
-        _handGrabber.PutTargetToBasket(pickableObject);
+        if (_handGrabber.CurrentHandState != HandGrabber.HandState.HandToBasket)
+        {
+            _handGrabber.PutTargetToBasket(pickableObject);
+        }
     }
+
 }

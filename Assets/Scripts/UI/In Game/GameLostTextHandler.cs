@@ -12,6 +12,11 @@ public class GameLostTextHandler : MonoBehaviour
         GameManager.Instance.OnGameLost += ShowText;
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameLost -= ShowText;
+    }
+
     private void ShowText()
     {
         _gameLostTextParent.gameObject.SetActive(true);

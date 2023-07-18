@@ -7,7 +7,6 @@ public class ConveyorTransporter : MonoBehaviour
     [Header("Essentials")]
     [SerializeField] private PickableObjectsHandler _pickableObjectsHandler;
     [SerializeField] private HandGrabber _handGrabber;
-    [SerializeField] private Basket _basket;
 
     [Header("Path")]
     [SerializeField] private Transform _startPoint;
@@ -24,6 +23,12 @@ public class ConveyorTransporter : MonoBehaviour
     {
         GameManager.Instance.OnLevelPassed += DecelerateConveyor;
         GameManager.Instance.OnGameLost += DecelerateConveyor;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnLevelPassed -= DecelerateConveyor;
+        GameManager.Instance.OnGameLost -= DecelerateConveyor;
     }
 
     private void Update()

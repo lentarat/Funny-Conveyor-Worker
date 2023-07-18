@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
         CurrentGameState = GameState.Win;
     }
 
+    [ContextMenu ("Load")]
     public void LoadNextLevel()
     {
         ReloadLevel();

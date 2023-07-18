@@ -14,6 +14,11 @@ public class TryAgainButtonHandler : MonoBehaviour
         GameManager.Instance.OnGameLost += SetButtonActive;
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameLost -= SetButtonActive;
+    }
+
     private void LoadNextLevel()
     {
         GameManager.Instance.ReloadLevel();

@@ -25,7 +25,12 @@ public class VictoryCameraMover : MonoBehaviour
 
         _cameraPathStartPosition = transform.position;
     }
-    [ContextMenu("go")]
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnLevelPassed -= MoveCamera;
+    }
+
     private void MoveCamera()
     {
         _timeWhenStartedFlying = Time.time;
@@ -50,8 +55,6 @@ public class VictoryCameraMover : MonoBehaviour
         float blendValue = (Time.time - _timeWhenStartedFlying) / _cameraFlyDuration;
 
         Vector3 calculatedPosition = Vector3.Lerp(_cameraPathStartPosition, _cameraPathEndTransform.position, blendValue);
-
-        Debug.Log(blendValue + " " + calculatedPosition);
 
         _camera.position = calculatedPosition;
     }

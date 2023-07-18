@@ -27,14 +27,16 @@ public class HandGrabber : MonoBehaviour
     private Vector3 _lastGrabbedDisappearedTargetPosition;
 
     private HandState _currentHandState;
+    public HandState CurrentHandState => _currentHandState;
+
     private float _currentBlendValue;
 
     private Coroutine _putTargetToBasketCoroutine;
     private bool _putTargetToBasketCoroutineIsRunning;
 
     private bool _isTouchingTarget;
-
-    private enum HandState
+    
+    public enum HandState
     {
         Idle,
         HandToTarget,
@@ -97,6 +99,12 @@ public class HandGrabber : MonoBehaviour
     {
         while (true)
         {
+
+            if (GameManager.Instance.CurrentGameState != GameManager.GameState.Active)
+            {
+                yield return null;
+            }
+
             switch (_currentHandState)
             {
                 case HandState.HandToTarget:
@@ -134,7 +142,7 @@ public class HandGrabber : MonoBehaviour
         if (HasHandReachedDestination() && _isTouchingTarget)
         {
             _isTouchingTarget = false;
-            
+
             SetHandState(HandState.HandToBasket);
 
             _currentBlendValue = 0f;
@@ -156,7 +164,7 @@ public class HandGrabber : MonoBehaviour
             SetHandState(HandState.HandToInitialPosition);
 
             _currentBlendValue = 0f;
-
+            
             _initialHandPosition = _realInitialHandPosition;
 
             _handsWithBasketHandler.LowerBasket();
@@ -231,3 +239,5 @@ public class HandGrabber : MonoBehaviour
         _isTouchingTarget = true;
     }
 }
+
+

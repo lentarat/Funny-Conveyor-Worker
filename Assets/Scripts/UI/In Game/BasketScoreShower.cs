@@ -19,10 +19,17 @@ public class BasketScoreShower : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(this.gameObject);
+
         Basket.OnPickableObjectWasAddedToBasket += ShowPlusOnePoint;
 
         _plusOneText.transform.position = _basketTransform.position;
         _initialPlusOneTextPosition = _plusOneText.transform.position;
+    }
+
+    private void OnDisable()
+    {
+        Basket.OnPickableObjectWasAddedToBasket -= ShowPlusOnePoint;
     }
 
     private void ShowPlusOnePoint()

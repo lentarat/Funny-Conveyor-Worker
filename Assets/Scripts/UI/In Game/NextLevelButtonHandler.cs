@@ -14,6 +14,11 @@ public class NextLevelButtonHandler : MonoBehaviour
         GameManager.Instance.OnLevelPassed += SetButtonActive;
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.OnLevelPassed -= SetButtonActive;
+    }
+
     private void LoadNextLevel()
     {
         GameManager.Instance.LoadNextLevel();

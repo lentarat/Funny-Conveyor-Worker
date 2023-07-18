@@ -24,14 +24,14 @@ public class PickableObjectsHandler : MonoBehaviour
     private float _lastTimeObjectWasSpawned;
 
 
-    private void Awake()
+    private void OnEnable()
     {
         HandGrabber.TargetGotInBasket += ManageLists;
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        //SpawnPickableObject();
+        HandGrabber.TargetGotInBasket -= ManageLists;
     }
 
     private void Update()
@@ -90,7 +90,7 @@ public class PickableObjectsHandler : MonoBehaviour
 
     public void RemovePickableObject(PickableObject pickableObject)
     {
-        pickableObject.gameObject.transform.parent = _spawnedPickableObjectsBasketParent;
+        //pickableObject.gameObject.transform.parent = _spawnedPickableObjectsBasketParent;
 
         _pickableObjects.Remove(pickableObject);
     }

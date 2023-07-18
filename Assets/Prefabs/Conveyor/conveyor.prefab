@@ -240,7 +240,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pickableObjectsHandler: {fileID: 0}
+  _handGrabber: {fileID: 0}
+  _basket: {fileID: 0}
   _startPoint: {fileID: 1272877840251816725}
   _destinationPoint: {fileID: 1272877839482135754}
   _destinationCatchRadius: 0.5
-  _speed: 0.7
+  _speed: 0.95
+  _deceleration: 0.99
